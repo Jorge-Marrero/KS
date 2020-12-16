@@ -63,6 +63,26 @@ public class Ks {
                 }
             }
         }
+        
+        if(config.getBoolean("memoization")){
+            if (config.contains("file")) {
+                reader.read(config.getString("file"));
+                memoizationFile(reader, config);
+            }
+            if (config.contains("directory")) {
+                File carpeta = new File(config.getString("directory"));
+                if (carpeta == null){
+                    System.err.println("El directorio no existe");
+                    System.exit(1);
+                }
+                for(File archivo : carpeta.listFiles()) {
+                    System.out.println(archivo.getName());
+                    reader.clear();
+                    reader.read(carpeta.getName() + "/" + archivo.getName());
+                    memoizationFile(reader, config);
+                }
+            }
+        }
     }
 	
     private static List<Integer> taken_Items(int[] taken, List<Item> items) {
@@ -121,6 +141,9 @@ public class Ks {
                     jsaper.registerParameter(new Switch("tabulation")
                                     .setLongFlag("st")
                                     .setHelp("Solve it with tabulation"));
+                    jsaper.registerParameter(new Switch("memoization")
+                                    .setLongFlag("sm")
+                                    .setHelp("Solve it with tabulation"));
 
                     return jsaper;
             }catch(JSAPException ex) {
@@ -140,13 +163,9 @@ public class Ks {
         int[] takenL = Greedy.solveGreedyLightest(items,bag);
         int value = 0;
         int valueH = calculateValue(takenH, items);
-        System.out.println("valueH: "+valueH);
         int valueV = calculateValue(takenV, items);
-        System.out.println("valueV: "+valueV);
         int valueR = calculateValue(takenR, items);
-        System.out.println("valueR: "+valueR);
         int valueL = calculateValue(takenL, items);
-        System.out.println("valueL: "+valueL);
 
         if(Math.max(valueH, Math.max(valueV, Math.max(valueR, valueL))) == valueH) {
                 taken =  Greedy.solveGreedyHeaviest(items, bag);
@@ -217,6 +236,41 @@ public class Ks {
         items = reader.getItems();
         long begin = System.currentTimeMillis();
         int[] taken = Tabulation.tabulation(items, bag);
+        int value = calculateValue(taken, items);
+        long end = System.currentTimeMillis();
+
+        List<Integer> takenitems = taken_Items(taken, reader.items);
+
+        if (config.getBoolean("benefit")) {
+                System.out.println(value);
+        }
+
+        if (config.getBoolean("room")) {
+            int weights = 0;
+            for (int i = 0; i < taken.length; i++) {
+                if (taken[i] == 1) {
+                    for (Item item:items) {
+                        if(item.getIndex() == i) weights += item.getWeight();
+                    }
+                }
+            }
+            System.out.println(reader.bag - weights);
+        }
+
+        if (config.getBoolean("time")) {
+            System.out.println(end - begin);
+        }
+
+        if (config.getBoolean("display_taken")) {
+            System.out.println(takenitems);
+        }
+    }
+    
+    private static void memoizationFile(Reader reader, JSAPResult config) {
+        bag = reader.getBag();
+        items = reader.getItems();
+        long begin = System.currentTimeMillis();
+        int[] taken = Memoization.memoization(items, bag);
         int value = calculateValue(taken, items);
         long end = System.currentTimeMillis();
 
