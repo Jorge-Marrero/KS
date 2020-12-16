@@ -13,9 +13,11 @@ public class Reader {
     int number;
     int bag;
     List<Item> items = new ArrayList<>();
+    private String fileName;
     
     public void read(String fileName) {
         int i = 0;
+        this.fileName = fileName;
         try{
         	//System.out.println(fileName);
             BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
@@ -53,5 +55,10 @@ public class Reader {
     	this.number = 0;
     	this.bag = 0;
     	this.items.clear();
+    }
+    
+    @Override
+    public String toString() {
+        return fileName;
     }
 }

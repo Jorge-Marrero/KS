@@ -26,6 +26,7 @@ public class Ks {
         }
         Reader reader = new Reader();
         if(config.getBoolean("greedy")){
+            System.out.println("Solved by Greedy algorithm");
             if (config.contains("file")) {
                 reader.read(config.getString("file"));
                 greedyFile(reader, config);
@@ -45,6 +46,7 @@ public class Ks {
             }
         }
         if(config.getBoolean("tabulation")){
+            System.out.println("Solved by Tabulation algorithm");
             if (config.contains("file")) {
                 reader.read(config.getString("file"));
                 tabulationFile(reader, config);
@@ -65,6 +67,7 @@ public class Ks {
         }
         
         if(config.getBoolean("memoization")){
+            System.out.println("Solved by Memoization algorithm");
             if (config.contains("file")) {
                 reader.read(config.getString("file"));
                 memoizationFile(reader, config);
@@ -170,26 +173,26 @@ public class Ks {
         if(Math.max(valueH, Math.max(valueV, Math.max(valueR, valueL))) == valueH) {
                 taken =  Greedy.solveGreedyHeaviest(items, bag);
                 value = valueH;
-                System.out.println(reader + ": Heaviest");
+                System.out.println(reader.toString() + ": Ordered by Heaviest");
         }else if(Math.max(valueH, Math.max(valueV, Math.max(valueR, valueL))) == valueV) {
                 taken =  Greedy.solveGreedyValue(items, bag);
                 value = valueV;
-                System.out.println(reader + ": Value");
+                System.out.println(reader.toString() + ": Ordered by Value");
         }else if(Math.max(valueH, Math.max(valueV, Math.max(valueR, valueL))) == valueL) {
                 taken =  Greedy.solveGreedyLightest(items, bag);
                 value = valueL;
-                System.out.println(reader + ": Lightest");
+                System.out.println(reader.toString() + ": Ordered by Lightest");
         }else {
                 taken =  Greedy.solveGreedyRelation(items, bag);
                 value = valueR;
-                System.out.println(reader + ": Relation");
+                System.out.println(reader.toString() + ": Ordered by Relation");
         }
         long end = System.currentTimeMillis();
 
         List<Integer> takenitems = taken_Items(taken, reader.items);
 
         if (config.getBoolean("benefit")) {
-            System.out.println(value);
+            System.out.println("Benefit: " + value);
         }
 
         if (config.getBoolean("room")) {
@@ -201,15 +204,15 @@ public class Ks {
                     }
                 }
             }
-            System.out.println(reader.bag - weights);
+            System.out.println("Room: " + (reader.bag - weights));
         }
 
         if (config.getBoolean("time")) {
-            System.out.println(end - begin);
+            System.out.println("Time: " + (end - begin) + " ms");
         }
 
         if (config.getBoolean("display_taken")) {
-            System.out.println(takenitems);
+            System.out.println("Taken items: " + takenitems);
         }
     }
     public static void toString(int[] taken) {
@@ -242,7 +245,7 @@ public class Ks {
         List<Integer> takenitems = taken_Items(taken, reader.items);
 
         if (config.getBoolean("benefit")) {
-                System.out.println(value);
+            System.out.println("Benefit: " + value);
         }
 
         if (config.getBoolean("room")) {
@@ -254,15 +257,15 @@ public class Ks {
                     }
                 }
             }
-            System.out.println(reader.bag - weights);
+            System.out.println("Room: " + (reader.bag - weights));
         }
 
         if (config.getBoolean("time")) {
-            System.out.println(end - begin);
+            System.out.println("Time: " + (end - begin) + " ms");
         }
 
         if (config.getBoolean("display_taken")) {
-            System.out.println(takenitems);
+            System.out.println("Taken items: " + takenitems);
         }
     }
     
@@ -277,7 +280,7 @@ public class Ks {
         List<Integer> takenitems = taken_Items(taken, reader.items);
 
         if (config.getBoolean("benefit")) {
-                System.out.println(value);
+            System.out.println("Benefit: " + value);
         }
 
         if (config.getBoolean("room")) {
@@ -289,15 +292,15 @@ public class Ks {
                     }
                 }
             }
-            System.out.println(reader.bag - weights);
+            System.out.println("Room: " + (reader.bag - weights));
         }
 
         if (config.getBoolean("time")) {
-            System.out.println(end - begin);
+            System.out.println("Time: " + (end - begin) + " ms");
         }
 
         if (config.getBoolean("display_taken")) {
-            System.out.println(takenitems);
+            System.out.println("Taken items: " + takenitems);
         }
     }
 }
